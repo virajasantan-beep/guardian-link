@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Register | Child Safety Monitoring{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7 col-md-10">
+    <div class="card glass-card p-4 p-md-5">
+      <div class="text-center mb-4">
+        <div class="login-icon mb-3"><i class="bi bi-person-plus-fill fs-1"></i></div>
+        <h2 class="fw-bold">Create Account</h2>
+        <p class="text-secondary-light">Join as a parent or child user</p>
+      </div>
+
+      <form method="POST">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <div class="input-group input-group-glow">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" name="full_name" class="form-control form-control-dark" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <div class="input-group input-group-glow">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control form-control-dark" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Password</label>
+            <div class="input-group input-group-glow">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control form-control-dark" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Role</label>
+            <select name="role" class="form-select form-control-dark" required>
+              <option value="parent">Parent</option>
+              <option value="child">Child</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-gradient w-100 py-2 mt-4">
+          <i class="bi bi-check2-circle me-2"></i>Create Account
+        </button>
+      </form>
+
+      <p class="mt-4 mb-0 text-center">
+        Already have an account?
+        <a href="{{ url_for('routes_bp.login') }}" class="link-glow fw-semibold text-decoration-none">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
