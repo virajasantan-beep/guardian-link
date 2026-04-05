@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Admin Purge | Child Safety Monitoring{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-5 col-md-8">
+    <div class="card glass-card p-4 p-md-5 delete-card text-center">
+      <div class="login-icon mb-3">
+        <i class="bi bi-database-x fs-1 text-danger"></i>
+      </div>
+      <h2 class="fw-bold text-danger">Admin: Purge All Data</h2>
+      <p class="text-secondary-light mb-4">
+        Enter the secret admin key to wipe all accounts and data from the system.
+      </p>
+
+      <div class="alert alert-danger glass-alert text-start">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        This will delete <strong>every user, incident, and piece of evidence</strong> in the database.
+      </div>
+
+      <form method="POST">
+        <input type="password" name="admin_key" class="form-control form-control-dark mb-3"
+               placeholder="Enter Admin Secret Key" required>
+        <button type="submit" class="btn btn-danger w-100 py-2">
+          <i class="bi bi-database-x me-2"></i>Purge Everything
+        </button>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="{{ url_for('routes_bp.welcome') }}"
+           class="link-glow text-decoration-none">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
