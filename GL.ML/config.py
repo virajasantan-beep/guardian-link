@@ -1,0 +1,9 @@
+MONGO_URI = "mongodb://localhost:27017"
+DB_NAME = "guardian_link"
+COLLECTION_NAME = "messages"
+
+RISK_THRESHOLD = 0.7
+CONTEXT_WINDOW = 3
+
+IG_ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"
+IG_USER_ID = "YOUR_USER_ID"
