@@ -1,6 +1,0 @@
-[
-  {"sender_id": "user1", "message": "you can trust me", "timestamp": "2026-04-03T10:00:00"},
-  {"sender_id": "user2", "message": "are you alone?", "timestamp": "2026-04-03T10:01:00"},
-  {"sender_id": "user3", "message": "don't tell anyone", "timestamp": "2026-04-03T10:02:00"},
-  {"sender_id": "user4", "message": "send me a photo", "timestamp": "2026-04-03T10:03:00"}
-]
