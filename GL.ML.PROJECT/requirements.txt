@@ -1,8 +1,0 @@
-flask
-flask-login
-flask-bcrypt
-flask-cors
-pymongo
-requests
-transformers
-torch
