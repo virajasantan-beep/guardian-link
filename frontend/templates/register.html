@@ -1,0 +1,35 @@
+  {% extends "base.html" %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-brand">
+    <div class="brand-logo">GL</div>
+    <h1>Guardian Link</h1>
+    <p>Protecting children, one message at a time.</p>
+    <div class="brand-features">
+      <div class="feature">AI-powered grooming detection</div>
+      <div class="feature">Real-time risk scoring</div>
+      <div class="feature">Instant alerts</div>
+    </div>
+  </div>
+  <div class="auth-form-panel">
+    <div class="auth-card">
+      <h2>Create account</h2>
+      <p class="auth-sub">Start protecting your children today</p>
+      <div class="form-group">
+        <label>Email address</label>
+        <input id="email" type="email" placeholder="guardian@email.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="••••••••" oninput="checkStrength(this.value)">
+        <div class="strength-bar">
+          <div class="strength-fill" id="strength-fill"></div>
+        </div>
+        <span class="strength-label" id="strength-label"></span>
+      </div>
+      <button class="btn-primary" onclick="register()">Create account</button>
+      <p class="auth-link">Already have an account? <a href="/">Sign in</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

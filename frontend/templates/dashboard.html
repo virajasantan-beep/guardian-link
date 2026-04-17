@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">GL</div>
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
+    <nav class="sidebar-nav">
+      <a class="nav-item" onclick="showSection('sentiment')">
+  <span class="nav-icon">🎭</span> Sentiment
+</a>
+
+<a class="nav-item" onclick="showSection('children')">
+  <span class="nav-icon">👶</span> My Children
+</a>
+
+<a class="nav-item" onclick="showSection('weeklyreport')">
+  <span class="nav-icon">📄</span> PDF Report
+</a>
+
+      <a class="nav-item active" onclick="showSection('alerts')">
+        <span class="nav-icon">🚨</span> Alerts
+        <span class="nav-badge" id="alert-badge"></span>
+      </a>
+      <a class="nav-item" onclick="showSection('grooming')">
+        <span class="nav-icon">🧠</span> Grooming
+      </a>
+      <a class="nav-item" onclick="showSection('reports')">
+        <span class="nav-icon">📊</span> Reports
+      </a>
+
+      <!-- ── SOCIAL ACCOUNTS NAV ITEM (new) ── -->
+      <a class="nav-item" onclick="showSection('social')">
+        <span class="nav-icon">🔗</span> Connected Accounts
+      </a>
+
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- ── SENTIMENT SECTION ─────────────────────────────────────────── -->
+<section id="section-sentiment" class="section">
+  <div class="section-header">
+    <h2>Sentiment Analysis</h2>
+    <span class="section-badge" id="sentiment-badge"></span>
+  </div>
+  <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;">
+    Emotional tone detected in each flagged message, powered by AI.
+    Anger, fear, and disgust indicate potential manipulation tactics.
+  </p>
+  <div id="sentiment-list"></div>
+</section>
+
+<!-- ── CHILDREN SECTION ───────────────────────────────────────────── -->
+<section id="section-children" class="section">
+  <div class="section-header"><h2>My Children</h2></div>
+  <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;">
+    Link child usernames to friendly names so alerts show "Alex" instead of "user3".
+  </p>
+
+  <!-- Add child form -->
+  <div class="panel" style="max-width:480px;margin-bottom:24px;">
+    <h3>Link a child account</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Username / ID seen in alerts</label>
+        <input id="child-username" type="text" placeholder="e.g. user3 or @alex_ig">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Display name</label>
+        <input id="child-displayname" type="text" placeholder="e.g. Alex">
+      </div>
+      <button class="btn-primary" style="margin-bottom:0;" onclick="addChild()">
+        Link account
+      </button>
+    </div>
+  </div>
+
+  <!-- Linked children list -->
+  <div class="section-header" style="margin-bottom:12px;">
+    <h2 style="font-size:15px;">Linked accounts</h2>
+  </div>
+  <div id="children-list"></div>
+</section>
+
+<!-- ── PDF REPORT SECTION ─────────────────────────────────────────── -->
+<section id="section-weeklyreport" class="section">
+  <div class="section-header"><h2>Weekly PDF Report</h2></div>
+  <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:24px;">
+    Download a full safety report or send it to your registered email.
+    Reports include all risk stats, grooming flags, and AI explanations.
+  </p>
+
+  <div class="reports-grid">
+    <div class="panel">
+      <h3>Download report</h3>
+      <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;line-height:1.6;">
+        Generates a PDF covering all messages currently in the database —
+        stats, per-user breakdown, grooming flags, and AI explanations.
+      </p>
+      <button class="btn-primary" onclick="downloadReport()" id="btn-download">
+        Download PDF
+      </button>
+    </div>
+
+    <div class="panel">
+      <h3>Email report now</h3>
+      <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;line-height:1.6;">
+        Sends the PDF to your registered guardian email immediately,
+        without waiting for the Monday 08:00 scheduled delivery.
+      </p>
+      <button class="btn-primary" onclick="emailReport()" id="btn-email">
+        Send to my email
+      </button>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <h3>Scheduled delivery</h3>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);">
+        Automatic weekly email
+      </div>
+      <div style="
+        background:rgba(26,188,156,0.15);
+        color:#1ABC9C;
+        font-size:12px;
+        padding:4px 12px;
+        border-radius:20px;
+        font-weight:600;">
+        Every Monday at 08:00
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);">
+        Configure in <code style="color:#1ABC9C;">alerts.py</code> → RECEIVER_EMAIL
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- TOP STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Total Messages</div>
+        <div class="stat-value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-label">Risky Messages</div>
+        <div class="stat-value" id="stat-risky">—</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Risk Percentage</div>
+        <div class="stat-value" id="stat-percent">—</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-label">High Risk Users</div>
+        <div class="stat-value" id="stat-highrisk">—</div>
+      </div>
+    </div>
+
+    <!-- ALERTS SECTION -->
+    <section id="section-alerts" class="section active">
+      <div class="section-header">
+        <h2>Active Alerts</h2>
+        <span class="section-badge" id="alerts-count"></span>
+      </div>
+      <div id="alerts-list"></div>
+    </section>
+
+    <!-- GROOMING SECTION -->
+    <section id="section-grooming" class="section">
+      <div class="section-header"><h2>Grooming Detection</h2></div>
+      <div id="grooming-list" class="grid"></div>
+    </section>
+
+    <!-- REPORTS SECTION -->
+    <section id="section-reports" class="section">
+      <div class="section-header"><h2>Risk Reports</h2></div>
+      <div class="reports-grid">
+        <div class="panel">
+          <h3>Safe vs Risky</h3>
+          <canvas id="donut-chart"></canvas>
+        </div>
+        <div class="panel">
+          <h3>User Risk Table</h3>
+          <div id="user-table"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONNECTED ACCOUNTS SECTION (new) ───────────────────────── -->
+    <section id="section-social" class="section">
+
+      <div class="section-header">
+        <h2>Connected Accounts</h2>
+      </div>
+
+      <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:8px;line-height:1.6;">
+        Connect your social media accounts so Guardian Link can monitor
+        your child's conversations for risk signals.
+      </p>
+
+      <div class="social-info-notice">
+        <strong>How it works:</strong> Connect Facebook first. Instagram Business accounts
+        are automatically linked through your connected Facebook Page.
+        Tokens are encrypted at rest and never shared with third parties.
+      </div>
+
+      <div class="social-cards-grid">
+
+        <!-- Facebook card -->
+        <div class="social-card">
+          <div class="social-card-header">
+            <div class="social-icon facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#4267B2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="social-card-title">Facebook</div>
+              <div class="social-card-subtitle">Messenger monitoring</div>
+            </div>
+          </div>
+          <div class="social-status-row">
+            <span class="social-dot disconnected" id="facebook-dot"></span>
+            <span class="social-status disconnected" id="facebook-status">Not connected</span>
+            <span class="social-account-name" id="facebook-name" style="display:none;"></span>
+          </div>
+          <button class="btn-social-connect" id="facebook-btn" onclick="connectPlatform('facebook')">
+            Connect Facebook
+          </button>
+        </div>
+
+        <!-- Instagram card -->
+        <div class="social-card">
+          <div class="social-card-header">
+            <div class="social-icon instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%"   stop-color="#fcb045"/>
+                    <stop offset="50%"  stop-color="#fd1d1d"/>
+                    <stop offset="100%" stop-color="#833ab4"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="social-card-title">Instagram</div>
+              <div class="social-card-subtitle">DM monitoring (Business/Creator)</div>
+            </div>
+          </div>
+          <div class="social-status-row">
+            <span class="social-dot disconnected" id="instagram-dot"></span>
+            <span class="social-status disconnected" id="instagram-status">Not connected</span>
+            <span class="social-account-name" id="instagram-name" style="display:none;"></span>
+          </div>
+          <button class="btn-social-connect instagram" id="instagram-btn" onclick="connectPlatform('instagram')">
+            Connect Instagram
+          </button>
+        </div>
+
+      </div><!-- /.social-cards-grid -->
+
+    </section>
+    <!-- ── END CONNECTED ACCOUNTS ──────────────────────────────────── -->
+
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>startAutoRefresh();</script>
+{% endblock %}

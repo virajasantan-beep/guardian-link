@@ -1,0 +1,13 @@
+flask
+flask-login
+flask-bcrypt
+flask-cors
+pymongo
+requests
+transformers
+torch
+flask-socketio
+anthropic
+reportlab
+apscheduler
+cryptography
