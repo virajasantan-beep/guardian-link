@@ -1,0 +1,17 @@
+flask
+flask-login
+flask-bcrypt
+flask-cors
+pymongo
+requests
+transformers
+torch
+flask-socketio
+anthropic
+reportlab
+apscheduler
+cryptography
+
+# ── Added for live video monitoring ──
+opencv-python-headless>=4.8
+numpy>=1.24
